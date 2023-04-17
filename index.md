@@ -1,44 +1,195 @@
-## Location
-> Browse [Coram Ranch Site](https://www.coramranch.com/) to learn about reunion location and surrounding community. 
-- [Video Tour](https://youtu.be/kX24Zv1CJZA)
-- [Google Maps 14251 Coram Rd, Shasta Lake, California 96089](https://www.google.com/maps/place/14251+Coram+Rd,+Shasta+Lake,+CA+96019/@40.707988,-122.44701,16z/data=!4m5!3m4!1s0x54d28be161c895ef:0xca3b8805b9b6a5ec!8m2!3d40.7079882!4d-122.4470104?hl=en)
-- ***NO PETS***
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goals</title>
+    <link rel="stylesheet" href="goals.css">
+    <link rel="oogabooga">
+</head>
+<body>
+  <main class = "table"> 
+      <section class="table_header">
+        <h1>Goals</h1>
+        <table id = "table">
+      <!-- </section> -->
+      <section class="table_body">
+        <table>
+          <thead>
+          <tbody id="body">
+            <tr>
+              <!-- <th> id </th> -->
+              <th> Goal </th>
+              <th> Difficulty </th>
+              <th> Date </th>
+            <tr>
+            <tbody>
+            </tbody>
+        <!-- </table> -->
 
-## Schedule
 
-| Date | Day | Time | Event | Meet At | Coordinator |
-| --- | --- | --- | --- | --- | --- |
-| 6/26 | Monday | 3pm | Check in | Shasta Lakes | Frank and Judith |
-| --- | --- | 6pm | Dinner | Dining Room | Lisa |
-| --- | --- | 7pm | Leuck Greet | Dining Room | Frank and Judith |
-| 6/27 | Tuesday | 8am | Breakfast | Dining Room | Lisa |
-| --- | --- | 9:45am | Morning Huddle | Dining Room | Sherri|
-| --- | --- | 10am | Greet Games | Field and Court | Johnner, Lora, Shay|
-| --- | --- | 12pm | Make & Go Lunch | Dining Room | Lisa |
-| --- | --- | 2pm | Bike/Hike | Bike Rack | Johnner and Lora |
-| --- | --- | 6pm | Dinner hi| Dining Room | Sherri |
-| --- | --- | 7pm | Family Night | Dining Room | John and Mel |
-| 6/28 | Wednesday | 7:30 | Zumba | Court | Kira |
-| --- | --- | 8:30am | Breakfast | Dining | Lisa |
-| --- | --- | 10am | Pool Olympics | Pool Area | Annalyce, Peyton |
-| --- | --- | 12pm | Make & Go Lunch | Dining Room | Lisa |
-| --- | --- | 1pm | Spelunking | [Cars, 32 minutes travel](http://lakeshastacaverns.clickforward.com/group-tours) | Johnner and Lora|
-| --- | --- | 6pm | Dinner | Dining Room | Angela |
-| --- | --- | 7pm | Family Night | Dining Room | John and Mel |
-| 6/29 | Thursday | 8am | Breakfast | Dining Room | Lisa |
- --- | --- | 8am | Boating Group #1| [Cars, 25 minutes travel](https://bridgebayhouseboats.com/houseboats/grand-sierra) | Jared |
-  --- | --- | 10:30am | Boating Group #2 | [Cars, 25 minutes travel](https://bridgebayhouseboats.com/houseboats/grand-sierra) | Jared |
-| --- | --- | 12pm | Make & Go Lunch | Dining Room | Lisa |
-| --- | --- | 1pm | Boating Group #3| [Cars, 25 minutes travel](https://bridgebayhouseboats.com/houseboats/grand-sierra) | Jared |
-| --- | --- | 3:30pm | Boating Group #4| [Cars, 25 minutes travel](https://bridgebayhouseboats.com/houseboats/grand-sierra) | Jared |
-| --- | --- | 6pm | Dinner | Dining Room | Jared and Jeremiah |
-| --- | --- | 7pm | Family Night | Dining Room | John and Mel |
-| 6/30 | Friday | 7:30 | Zumba | Court | Lisa |
-| --- | --- | 8:30am | Breakfast | Dining | Kira |
-| --- | --- | 10am | Field Olympics | Field | Jake, Taylor |
-| --- | --- | 12pm | Make & Go Lunch | Dining Room | Lisa |
-| --- | --- | 1pm | Explore the area | You pick | Self coordinated |
-| --- | --- | 6pm | Dinner | Dining Room | John |
-| --- | --- | 7pm | Family Night | Dining Room |John and Mel |
-| 7/1 | Saturday | 8am | Breakfast | Dining Room | Lisa |
-| --- | --- | 10am | Check Out | Travel Home | Your it |
+<form action="javascript:createGoal()">
+    <p><label>
+        Goal:
+        <input type="text"  id="goal" required>
+    </label></p>
+    <p><label>
+        Diff:
+        <input type="text"  id="diff" required>
+    </label></p>
+     <p><label>
+        Date:
+        <input type="text"  id="time" required>
+    </label></p>
+      <p>
+        <button>Create</button>
+    </p>
+</form>
+
+
+
+  <script>
+
+  // prepare HTML result container for new output
+  const resultContainer = document.getElementById("body");
+  // prepare URL's to allow easy switch from deployment and localhost
+  const url = "https://lennsflask.duckdns.org/api/sport"
+  // const url = "http://127.0.0.1:8086/api/sport"
+  const create_fetch = url + '/create';
+  const read_fetch = url + '/';
+
+  // Load users on page entry
+  read_goal();
+
+
+  // Display User Table, data is fetched from Backend Database
+  function read_goal() {
+    // prepare fetch options
+    const read_options = {
+      method: 'GET', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'omit', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    };
+
+    // fetch the data from API
+    fetch(read_fetch, read_options)
+      // response is a RESTful "promise" on any successful fetch
+      .then(response => {
+        // check for response errors
+        if (response.status !== 200) {
+            const errorMsg = 'Database read error: ' + response.status;
+            console.log(errorMsg);
+            const tr = document.createElement("tr");
+            const td = document.createElement("td");
+            td.innerHTML = errorMsg;
+            tr.appendChild(td);
+            resultContainer.appendChild(tr);
+            return;
+        }
+        // valid response will have json data
+        response.json().then(data => {
+            console.log(data);
+            for (let row in data) {
+              console.log(data[row]);
+              add_row(data[row]);
+            }
+        })
+    })
+    // catch fetch errors (ie ACCESS to server blocked)
+    .catch(err => {
+      console.error(err);
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.innerHTML = err;
+      tr.appendChild(td);
+      resultContainer.appendChild(tr);
+    });
+  }
+
+  function createGoal(){
+
+    console.log(document.getElementById("goal").value)
+    const body = {
+
+        goal: document.getElementById("goal").value,
+        diff: document.getElementById("diff").value,
+        time: document.getElementById("time").value,
+    };
+    console.log(body)
+    const requestOptions = {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            "content-type": "application/json",
+            'Authorization': 'Bearer my-token',
+        },
+    };
+
+    // URL for Create API
+    // Fetch API call to the database to create a new user
+    fetch(create_fetch, requestOptions)
+      .then(response => {
+        // trap error response from Web API
+        if (response.status !== 200) {
+          const errorMsg = 'Database create error: ' + response.status;
+          console.log(errorMsg);
+          const tr = document.createElement("tr");
+          const td = document.createElement("td");
+          td.innerHTML = errorMsg;
+          tr.appendChild(td);
+          resultContainer.appendChild(tr);
+          return;
+        }
+        // response contains valid result
+        response.json().then(data => {
+            console.log(data);
+            //add a table row for the new/created userid
+            add_row(body);
+        })
+    })
+  }
+
+  function add_row(data) {
+    console.log(data)
+    const tr = document.createElement("tr");
+    const goal = document.createElement("th");
+    const diff = document.createElement("th");
+    const time = document.createElement("th");
+  
+
+    // obtain data that is specific to the API
+    goal.innerHTML = data.goal; 
+    diff.innerHTML = data.diff;
+    time.innerHTML = data.time; 
+    
+
+    // add HTML to container
+    tr.appendChild(goal);
+    tr.appendChild(diff);
+    tr.appendChild(time);
+
+    resultContainer.appendChild(tr);
+  }
+    </script>
+
+
+<!-- 
+ <form action="http://127.0.0.1:8086/api/sport/create" method="post">
+    <label for="goal">Goal:</label><br>
+    <input type="text" id="goal" name="goal" placeholder="enter your goal"><br>
+    <!--  -->
+
+<!-- 
+</form> 
+<br>
+<br>
+<button onclick="addRow()">Add Row</button> --> 
+
+
+
+
